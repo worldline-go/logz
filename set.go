@@ -26,34 +26,98 @@ var LogWriter = zerolog.ConsoleWriter{
 	},
 }
 
+type Selection uint8
+
+const (
+	Auto Selection = iota
+	True
+	False
+)
+
+type Settings struct {
+	Pretty    Selection
+	Timestamp bool
+	Caller    bool
+	_isPretty bool
+}
+
+func (s Settings) SetTimestamp(v bool) *Settings {
+	s.Timestamp = v
+
+	return &s
+}
+
+func (s Settings) SetCaller(v bool) *Settings {
+	s.Caller = v
+
+	return &s
+}
+
+func (s Settings) SetPretty(v Selection) *Settings {
+	s.Pretty = v
+
+	return &s
+}
+
+var DefaultLogSettings = Settings{
+	Pretty:    Auto,
+	Timestamp: true,
+	Caller:    true,
+}
+
 // InitializeLog choice between json format or common format.
 // LOG_PRETTY boolean environment value always override the decision.
 // Override with 'pretty' boolean argument.
-func InitializeLog(pretty *bool) {
-	isPretty := false
+func InitializeLog(lSettings *Settings) {
+	logger := GetLogger(lSettings)
+	log.Logger = logger
+
+	zerolog.DefaultContextLogger = &log.Logger
+}
+
+func GetLogger(lSettings *Settings) (logger zerolog.Logger) {
+	settings := DefaultLogSettings
+	if lSettings != nil {
+		settings = *lSettings
+	}
 
 	defer func() {
 		zerolog.TimeFieldFormat = TimeFormat
-		if isPretty {
-			log.Logger = zerolog.New(LogWriter).With().Timestamp().Logger()
+
+		var logX zerolog.Context
+		if settings._isPretty {
+			logX = zerolog.New(LogWriter).With()
+		} else {
+			logX = zerolog.New(os.Stderr).With()
 		}
 
-		zerolog.DefaultContextLogger = &log.Logger
+		if settings.Timestamp {
+			logX = logX.Timestamp()
+		}
+
+		if settings.Caller {
+			logX = logX.Caller()
+		}
+
+		logger = logX.Logger()
 	}()
 
-	if pretty != nil {
-		isPretty = *pretty
+	// set pretty format
+	if settings.Pretty != Auto {
+		settings._isPretty = settings.Pretty == True
 
 		return
 	}
 
 	if v, ok := os.LookupEnv(PrettyEnv); ok {
-		isPretty, _ = strconv.ParseBool(v)
+		settings._isPretty, _ = strconv.ParseBool(v)
 
 		return
 	}
 
-	isPretty = isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
+	settings._isPretty = isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
+
+	return
 }
 
 // SetLogLevel globally changes zerolog's level.

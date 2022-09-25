@@ -21,8 +21,8 @@ func main() {
 
 	log.Info().Msg("Log test 1 2 1 2")
 
-	myLogFormat := log.With().Str("log_source", "mycomponent").Logger()
-	kvLogger := logz.AdapterKV{Log: myLogFormat}
+	myLogFormat := logz.GetLogger(logz.DefaultLogSettings.SetCaller(false)).With().Str("log_source", "mycomponent").Logger()
+	kvLogger := logz.AdapterKV{Log: myLogFormat, Caller: true}
 
 	kvLogger.Error("this is message", "err", "failed x")
 

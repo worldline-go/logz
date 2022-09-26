@@ -62,7 +62,7 @@ func (s Settings) SetPretty(v Selection) *Settings {
 var DefaultLogSettings = Settings{
 	Pretty:    Auto,
 	Timestamp: true,
-	Caller:    true,
+	Caller:    false,
 }
 
 // InitializeLog choice between json format or common format.

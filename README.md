@@ -17,6 +17,12 @@ logz.InitializeLog(nil)
 log.Info().Msg("Log test 1 2 1 2")
 ```
 
+Caller disabled by default to enable it set with config.
+
+```go
+logz.InitializeLog(logz.DefaultLogSettings.SetCaller(true))
+```
+
 To change formats, change logz values before the initialize.
 
 ```go
@@ -29,19 +35,19 @@ Results of example `go run -trimpath _example/main.go`
 In pretty format
 
 ```sh
-2022-09-26 01:03:48 INF ./main.go:20 > default ctx log
-2022-09-26 01:03:48 INF ./main.go:22 > Log test 1 2 1 2
-2022-09-26 01:03:48 ERR ./main.go:27 > this is message err="failed x" log_source=mycomponent
-2022-09-26 01:03:48 DBG ./main.go:32 > helloo level info but show debug component=test
+2022-09-26 17:28:26 INF default ctx log
+2022-09-26 17:28:26 INF Log test 1 2 1 2
+2022-09-26 17:28:26 ERR this is message err="failed x" log_source=mycomponent
+2022-09-26 17:28:26 DBG helloo level info but show debug component=test
 ```
 
 In container
 
 ```sh
-{"level":"info","time":"2022-09-26T01:49:03.403821654+02:00","caller":"./main.go:20","message":"default ctx log"}
-{"level":"info","time":"2022-09-26T01:49:03.403865164+02:00","caller":"./main.go:22","message":"Log test 1 2 1 2"}
-{"level":"error","log_source":"mycomponent","err":"failed x","time":"2022-09-26T01:49:03.403880354+02:00","caller":"./main.go:27","message":"this is message"}
-{"level":"info","component":"test","time":"2022-09-26T01:49:03.403893244+02:00","caller":"./main.go:32","level":"debug","message":"helloo level info but show debug"}
+{"level":"info","time":"2022-09-26T17:28:33.64382204+02:00","message":"default ctx log"}
+{"level":"info","time":"2022-09-26T17:28:33.64385865+02:00","message":"Log test 1 2 1 2"}
+{"level":"error","log_source":"mycomponent","err":"failed x","time":"2022-09-26T17:28:33.64387864+02:00","message":"this is message"}
+{"level":"info","component":"test","time":"2022-09-26T17:28:33.64388865+02:00","level":"debug","message":"helloo level info but show debug"}
 ```
 
 ### With LogLevel

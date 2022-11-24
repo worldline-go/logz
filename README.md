@@ -12,7 +12,7 @@ InitializeLog auto format, json or pretty print.
 Use `LOG_PRETTY` boolean env value `(1, t, T, TRUE, true, True)` to set it.
 
 ```go
-logz.InitializeLog(nil)
+logz.InitializeLog()
 
 log.Info().Msg("Log test 1 2 1 2")
 ```
@@ -20,14 +20,14 @@ log.Info().Msg("Log test 1 2 1 2")
 Caller disabled by default to enable it set with config.
 
 ```go
-logz.InitializeLog(logz.DefaultLogSettings.SetCaller(true))
+logz.InitializeLog(logz.WithCaller(true))
 ```
 
 To change formats, change logz values before the initialize.
 
 ```go
 logz.TimeFormat       = time.RFC3339Nano
-logz.TimePrettyFormat = "2006-01-02 15:04:05"
+logz.TimePrettyFormat = "2006-01-02 15:04:05 MST"
 ```
 
 Results of example `go run -trimpath _example/main.go`
@@ -35,19 +35,19 @@ Results of example `go run -trimpath _example/main.go`
 In pretty format
 
 ```sh
-2022-09-26 17:28:26 INF default ctx log
-2022-09-26 17:28:26 INF Log test 1 2 1 2
-2022-09-26 17:28:26 ERR this is message err="failed x" log_source=mycomponent
-2022-09-26 17:28:26 DBG helloo level info but show debug component=test
+2022-11-24 14:55:00 CET INF _example/main.go:20 > default ctx log
+2022-11-24 14:55:00 CET INF _example/main.go:22 > Log test 1 2 1 2
+2022-11-24 14:55:00 CET ERR adapters.go:31 > this is message err="failed x" log_source=mycomponent
+2022-11-24 14:55:00 CET DBG _example/main.go:32 > helloo level info but show debug component=test
 ```
 
 In container
 
 ```sh
-{"level":"info","time":"2022-09-26T17:28:33.64382204+02:00","message":"default ctx log"}
-{"level":"info","time":"2022-09-26T17:28:33.64385865+02:00","message":"Log test 1 2 1 2"}
-{"level":"error","log_source":"mycomponent","err":"failed x","time":"2022-09-26T17:28:33.64387864+02:00","message":"this is message"}
-{"level":"info","component":"test","time":"2022-09-26T17:28:33.64388865+02:00","level":"debug","message":"helloo level info but show debug"}
+{"level":"info","time":"2022-11-24T14:56:00.611277862+01:00","caller":"./main.go:20","message":"default ctx log"}
+{"level":"info","time":"2022-11-24T14:56:00.611330401+01:00","caller":"./main.go:22","message":"Log test 1 2 1 2"}
+{"level":"error","log_source":"mycomponent","err":"failed x","time":"2022-11-24T14:56:00.611339445+01:00","caller":"github.com/worldline-go/logz/adapters.go:31","message":"this is message"}
+{"level":"info","component":"test","time":"2022-11-24T14:56:00.611348632+01:00","caller":"./main.go:32","level":"debug","message":"helloo level info but show debug"}
 ```
 
 ### With LogLevel

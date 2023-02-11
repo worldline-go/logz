@@ -65,5 +65,5 @@ Example for `echo` webframework with `lecho`
 Added info level in message and limit it with info level.
 
 ```go
-e.Logger = lecho.New(loghelper.LevelWriter(log.Logger.Hook(loghelper.Hooks.InfoHook), zerolog.InfoLevel))
+e.Logger = lecho.New(logz.LevelWriter(log.Logger.Hook(logz.Hooks.InfoHook), zerolog.InfoLevel))
 ```

@@ -3,7 +3,7 @@
 Helpful middleware for echo framework.
 
 ```sh
-go get github.com/zerolog/logz/logecho
+go get github.com/worldline-go/logz/logecho
 ```
 
 ## Usage

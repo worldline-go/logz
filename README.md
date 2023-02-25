@@ -62,8 +62,6 @@ _, _ = io.Copy(logz.LevelWriter(&logPull, zerolog.DebugLevel), strings.NewReader
 
 Example for `echo` webframework with `lecho`
 
-Added info level in message and limit it with info level.
-
 ```go
-e.Logger = lecho.New(logz.LevelWriter(log.Logger.Hook(logz.Hooks.InfoHook), zerolog.InfoLevel))
+e.Logger = lecho.New(log.Logger)
 ```

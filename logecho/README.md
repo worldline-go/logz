@@ -15,3 +15,10 @@ e.Use(
     logecho.ZerologLogger(),
 )
 ```
+
+To get back the logger from the context:
+
+```go
+// this will show the request ID in the log
+log.Ctx(c.Request().Context()).Info().Msg("Hello world")
+```

@@ -33,4 +33,7 @@ func main() {
 
 	// use level with io.Copy
 	_, _ = io.Copy(logz.LevelWriter(logTest, zerolog.DebugLevel), strings.NewReader("message X"))
+
+	ctx = log.Ctx(ctx).With().Str("component", "context-test").Logger().WithContext(ctx)
+	log.Ctx(ctx).Info().Msg("testing")
 }

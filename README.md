@@ -6,6 +6,11 @@ This library help to easily initialize log formats in projects.
 go get github.com/worldline-go/logz
 ```
 
+Check helper for other modules:
+
+__-__ [logfx](./logfx/README.md) -> zerolog for uber fx dependecy injection library  
+__-__ [logecho](./logecho/README.md) -> zerolog for echo web framework  
+
 ## Usage
 
 InitializeLog auto format, json or pretty print.  
@@ -21,6 +26,15 @@ Caller disabled by default to enable it set with config.
 
 ```go
 logz.InitializeLog(logz.WithCaller(true))
+```
+
+InitializeLog also adds the generated logger to the `DefaultContextLogger`.  
+If not found any logger in context, it will return `log.Logger`.
+
+```go
+ctx = log.Ctx(ctx).With().Str("component", "context-test").Logger().WithContext(ctx)
+log.Ctx(ctx).Info().Msg("testing")
+// 2023-03-10 14:37:24 CET INF _example/main.go:38 > testing component=context-test
 ```
 
 To change formats, change logz values before the initialize.

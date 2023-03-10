@@ -83,7 +83,7 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 			moduleField(e.ModuleName, l.Logger.Error().Str("function", e.FunctionName)).Err(e.Err).Msg("invocation failed")
 		}
 	case *fxevent.Stopping:
-		l.Logger.Info().Str("signal", strings.ToUpper(e.Signal.String())).Msg("received signal")
+		l.Logger.Warn().Str("signal", strings.ToUpper(e.Signal.String())).Msg("received signal")
 	case *fxevent.Stopped:
 		if e.Err != nil {
 			l.Logger.Error().Err(e.Err).Msgf("stop failed %s", l.options.AppendMessage)

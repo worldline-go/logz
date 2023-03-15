@@ -4,29 +4,24 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"go.uber.org/fx/fxevent"
 )
 
 // ZeroLogger is an Fx event logger that logs events to Zerolog.
-type ZeroLogger struct {
-	Logger zerolog.Logger
+type ZeroLogger options
 
-	options options
-}
-
-func Event(logger zerolog.Logger, opts ...Option) fxevent.Logger {
+func New(opts ...Option) fxevent.Logger {
 	o := options{
 		StartMessage: "started",
 		StopMessage:  "stopped",
+		Logger:       log.Logger,
 	}
 	for _, opt := range opts {
 		opt(&o)
 	}
 
-	return &ZeroLogger{
-		Logger:  logger,
-		options: o,
-	}
+	return (*ZeroLogger)(&o)
 }
 
 // LogEvent logs the given event to the provided Zap logger.
@@ -86,9 +81,9 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		l.Logger.Warn().Str("signal", strings.ToUpper(e.Signal.String())).Msg("received signal")
 	case *fxevent.Stopped:
 		if e.Err != nil {
-			l.Logger.Error().Err(e.Err).Msgf("stop failed %s", l.options.AppendMessage)
+			l.Logger.Error().Err(e.Err).Msgf("stop failed%s", l.AppendMessage)
 		} else {
-			l.Logger.Info().Msgf("%s%s", l.options.StopMessage, l.options.AppendMessage)
+			l.Logger.Info().Msgf("%s%s", l.StopMessage, l.AppendMessage)
 		}
 	case *fxevent.RollingBack:
 		l.Logger.Info().Err(e.StartErr).Msg("start failed, rolling back")
@@ -98,9 +93,9 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		}
 	case *fxevent.Started:
 		if e.Err != nil {
-			l.Logger.Error().Err(e.Err).Msgf("start failed %s", l.options.AppendMessage)
+			l.Logger.Error().Err(e.Err).Msgf("start failed%s", l.AppendMessage)
 		} else {
-			l.Logger.Info().Msgf("%s%s", l.options.StartMessage, l.options.AppendMessage)
+			l.Logger.Info().Msgf("%s%s", l.StartMessage, l.AppendMessage)
 		}
 	case *fxevent.LoggerInitialized:
 		if e.Err != nil {

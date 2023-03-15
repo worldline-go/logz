@@ -36,7 +36,7 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Msg("OnStart hook executing")
 	case *fxevent.OnStartExecuted:
 		if e.Err != nil {
-			l.Logger.Error().Str("callee", e.FunctionName).Str("caller", e.CallerName).Err(e.Err).Msg("OnStart hook failed")
+			l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Err(e.Err).Msg("OnStart hook failed")
 		} else {
 			l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Str("runtime", e.Runtime.String()).Msg("OnStart hook executed")
 		}
@@ -44,13 +44,13 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Msg("OnStop hook executing")
 	case *fxevent.OnStopExecuted:
 		if e.Err != nil {
-			l.Logger.Error().Str("callee", e.FunctionName).Str("caller", e.CallerName).Err(e.Err).Msg("OnStop hook failed")
+			l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Err(e.Err).Msg("OnStop hook failed")
 		} else {
 			l.Logger.Debug().Str("callee", e.FunctionName).Str("caller", e.CallerName).Str("runtime", e.Runtime.String()).Msg("OnStop hook executed")
 		}
 	case *fxevent.Supplied:
 		if e.Err != nil {
-			moduleField(e.ModuleName, l.Logger.Error().Str("type", e.TypeName)).Err(e.Err).Msg("error encountered while applying options")
+			moduleField(e.ModuleName, l.Logger.Debug().Str("type", e.TypeName)).Err(e.Err).Msg("error encountered while applying options")
 		} else {
 			moduleField(e.ModuleName, l.Logger.Debug().Str("type", e.TypeName)).Msg("supplied")
 		}
@@ -59,28 +59,28 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 			maybeBool("private", e.Private, moduleField(e.ModuleName, l.Logger.Debug().Str("constructor", e.ConstructorName)).Str("type", rtype)).Msg("provided")
 		}
 		if e.Err != nil {
-			moduleField(e.ModuleName, l.Logger.Error().Str("constructor", e.ConstructorName)).Err(e.Err).Msg("error encountered while applying options")
+			moduleField(e.ModuleName, l.Logger.Debug().Str("constructor", e.ConstructorName)).Err(e.Err).Msg("error encountered while applying options")
 		}
 	case *fxevent.Replaced:
 		for _, rtype := range e.OutputTypeNames {
 			moduleField(e.ModuleName, l.Logger.Debug()).Str("type", rtype).Msg("replaced")
 		}
 		if e.Err != nil {
-			moduleField(e.ModuleName, l.Logger.Error()).Err(e.Err).Msg("error encountered while replacing")
+			moduleField(e.ModuleName, l.Logger.Debug()).Err(e.Err).Msg("error encountered while replacing")
 		}
 	case *fxevent.Decorated:
 		for _, rtype := range e.OutputTypeNames {
 			moduleField(e.ModuleName, l.Logger.Debug().Str("decorator", e.DecoratorName)).Str("type", rtype).Msg("decorated")
 		}
 		if e.Err != nil {
-			moduleField(e.ModuleName, l.Logger.Error().Str("decorator", e.DecoratorName)).Err(e.Err).Msg("error encountered while applying options")
+			moduleField(e.ModuleName, l.Logger.Debug().Str("decorator", e.DecoratorName)).Err(e.Err).Msg("error encountered while applying options")
 		}
 	case *fxevent.Invoking:
 		// Do not log stack as it will make logs hard to read.
 		moduleField(e.ModuleName, l.Logger.Debug().Str("function", e.FunctionName)).Msg("invoking")
 	case *fxevent.Invoked:
 		if e.Err != nil {
-			moduleField(e.ModuleName, l.Logger.Error().Str("function", e.FunctionName)).Err(e.Err).Msg("invocation failed")
+			moduleField(e.ModuleName, l.Logger.Debug().Str("function", e.FunctionName)).Err(e.Err).Msg("invocation failed")
 		}
 	case *fxevent.Stopping:
 		l.Logger.Warn().Str("signal", strings.ToUpper(e.Signal.String())).Msg("received signal")

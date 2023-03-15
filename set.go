@@ -61,6 +61,10 @@ func Logger(opts ...Option) zerolog.Logger {
 		logX = logX.Caller()
 	}
 
+	for _, fn := range options.logContextFuncs {
+		logX = fn(logX)
+	}
+
 	return logX.Logger()
 }
 

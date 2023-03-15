@@ -26,15 +26,6 @@ func WithStopMessage(msg string) Option {
 // WithAppendMessage sets the message to log when the application start/stops.
 func WithAppendMessage(msg string) Option {
 	return func(o *options) {
-		o.AppendMessage = msg
-	}
-}
-
-// WithServiceMessage sets the message to log when the application start/stops.
-//
-// This is a convenience function that appends the service name and version to the append message.
-func WithServiceMessage(serviceName, serviceVersion string) Option {
-	return func(o *options) {
-		o.AppendMessage = serviceName + " [" + serviceVersion + "]"
+		o.AppendMessage = " " + msg
 	}
 }

@@ -11,7 +11,12 @@ import (
 )
 
 func main() {
-	logz.InitializeLog()
+	logz.InitializeLog(
+		logz.WithLogContextFunc(func(ctx zerolog.Context) zerolog.Context {
+			return ctx.Str("log_source", "main")
+		}),
+		logz.WithServiceInfo("awesome-service", "v0.2.4"),
+	)
 
 	logz.SetLogLevel("info")
 

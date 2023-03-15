@@ -10,8 +10,8 @@ go get github.com/worldline-go/logz/logfx
 
 ```go
 fx.WithLogger(func() fxevent.Logger {
-    logz.InitializeLog(logz.WithCaller(false))
-    return logfx.Event(log.Logger, logfx.WithServiceMessage("my-service", "v0.1.0"))
+    logz.InitializeLog(logz.WithServiceInfo("my-service", "v0.1.0"))
+    return logfx.Event(log.Logger)
 }),
 ```
 
@@ -31,12 +31,12 @@ func LoadConfig() *Config {
 func main() {
 	fx.New(
 		fx.WithLogger(func(cfg *Config) (fxevent.Logger, error) {
-			logz.InitializeLog(logz.WithCaller(false))
+			logz.InitializeLog(logz.WithServiceInfo("my-service", "v0.1.0"))
 			if err := logz.SetLogLevel(cfg.LogLevel); err != nil {
 				return nil, err
 			}
 
-			return logfx.Event(log.Logger, logfx.WithServiceMessage("my-service", "v0.1.0")), nil
+			return logfx.Event(log.Logger), nil
 		}),
 		fx.Provide(
 			LoadConfig,

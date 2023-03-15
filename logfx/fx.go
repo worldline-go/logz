@@ -88,7 +88,7 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		if e.Err != nil {
 			l.Logger.Error().Err(e.Err).Msgf("stop failed %s", l.options.AppendMessage)
 		} else {
-			l.Logger.Info().Msgf("%s %s", l.options.StopMessage, l.options.AppendMessage)
+			l.Logger.Info().Msgf("%s%s", l.options.StopMessage, l.options.AppendMessage)
 		}
 	case *fxevent.RollingBack:
 		l.Logger.Info().Err(e.StartErr).Msg("start failed, rolling back")
@@ -100,7 +100,7 @@ func (l *ZeroLogger) LogEvent(event fxevent.Event) {
 		if e.Err != nil {
 			l.Logger.Error().Err(e.Err).Msgf("start failed %s", l.options.AppendMessage)
 		} else {
-			l.Logger.Info().Msgf("%s %s", l.options.StartMessage, l.options.AppendMessage)
+			l.Logger.Info().Msgf("%s%s", l.options.StartMessage, l.options.AppendMessage)
 		}
 	case *fxevent.LoggerInitialized:
 		if e.Err != nil {

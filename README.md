@@ -28,6 +28,17 @@ Caller disabled by default to enable it set with config.
 logz.InitializeLog(logz.WithCaller(true))
 ```
 
+To modify the default logger with adding some additional values:
+
+```go
+logz.InitializeLog(
+    logz.WithLogContextFunc(func(ctx zerolog.Context) zerolog.Context {
+        return ctx.Str("log_source", "main")
+    }),
+    logz.WithServiceInfo("awesome-service", "v0.2.4"),
+)
+```
+
 InitializeLog also adds the generated logger to the `DefaultContextLogger`.  
 If not found any logger in context, it will return `log.Logger`.
 
@@ -44,15 +55,16 @@ logz.TimeFormat       = time.RFC3339Nano
 logz.TimePrettyFormat = "2006-01-02 15:04:05 MST"
 ```
 
-Results of example `go run -trimpath _example/main.go`
+Results of example `go run --trimpath _example/main.go`
 
 In pretty format
 
 ```sh
-2022-11-24 14:55:00 CET INF _example/main.go:20 > default ctx log
-2022-11-24 14:55:00 CET INF _example/main.go:22 > Log test 1 2 1 2
-2022-11-24 14:55:00 CET ERR github.com/worldline-go/logz/adapters.go:31 > this is message err="failed x" log_source=mycomponent
-2022-11-24 14:55:00 CET DBG _example/main.go:32 > helloo level info but show debug component=test
+2023-03-15 10:11:58 CET INF ./main.go:25 > default ctx log log_source=main service_name=awesome-service service_version=v0.2.4
+2023-03-15 10:11:58 CET INF ./main.go:27 > Log test 1 2 1 2 log_source=main service_name=awesome-service service_version=v0.2.4
+2023-03-15 10:11:58 CET ERR github.com/worldline-go/logz/adapters.go:49 > this is message err="failed x" log_source=mycomponent
+2023-03-15 10:11:58 CET DBG ./main.go:37 > helloo level info but show debug component=test log_source=main service_name=awesome-service service_version=v0.2.4
+2023-03-15 10:11:58 CET INF ./main.go:43 > testing component=context-test log_source=main service_name=awesome-service service_version=v0.2.4
 ```
 
 In container

@@ -22,7 +22,7 @@ fx.WithLogger(func() fxevent.Logger {
 })
 ```
 
-Detailed version with config loader, we get the config for changing the log level before to fx show the logs.
+Detailed version with config loader.
 
 ```go
 type Config struct {
@@ -30,23 +30,21 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	logz.InitializeLog(logz.WithServiceInfo("my-service", "v0.1.0"))
-
 	cfg := &Config{
 		LogLevel: "info",
 	}
 
+    // set loglevel again
+	logz.SetLogLevel(cfg.LogLevel)
+
 	return cfg, nil
 }
 
-func SetLogger(cfg *Config) (fxevent.Logger, error) {
-	if err := logz.SetLogLevel(cfg.LogLevel); err != nil {
-		return nil, err
-	}
+func SetLogger() fxevent.Logger {
+	logz.InitializeLog(logz.WithServiceInfo(ServiceName, ServiceVersion))
+	logz.SetLogLevel(DefaultLogLevel)
 
-	log.Info().Object("config", igconfig.Printer{Value: cfg}).Msg("loaded config")
-
-	return logfx.New(), nil
+	return logfx.New()
 }
 
 func main() {

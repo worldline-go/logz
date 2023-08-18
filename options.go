@@ -6,6 +6,7 @@ type options struct {
 	pretty          *bool
 	timeStamp       *bool
 	caller          *bool
+	level           *string
 	logContextFuncs []func(zerolog.Context) zerolog.Context
 }
 
@@ -26,6 +27,12 @@ func WithCaller(caller bool) Option {
 func WithPretty(pretty bool) Option {
 	return func(options *options) {
 		options.pretty = &pretty
+	}
+}
+
+func WithLevel(level string) Option {
+	return func(options *options) {
+		options.level = &level
 	}
 }
 

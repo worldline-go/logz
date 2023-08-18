@@ -10,7 +10,7 @@ type LogHook struct {
 	Level string
 }
 
-func (h LogHook) Run(e *zerolog.Event, level zerolog.Level, msg string) {
+func (h LogHook) Run(e *zerolog.Event, _ zerolog.Level, msg string) {
 	e.Str("level", h.Level)
 }
 

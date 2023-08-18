@@ -3,8 +3,8 @@ module github.com/worldline-go/logz/logfx
 go 1.17
 
 require (
-	github.com/rs/zerolog v1.29.0
-	go.uber.org/fx v1.19.2
+	github.com/rs/zerolog v1.30.0
+	go.uber.org/fx v1.20.0
 )
 
 require (
@@ -13,5 +13,5 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 )

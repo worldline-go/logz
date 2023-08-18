@@ -10,7 +10,8 @@ import (
 )
 
 var (
-	PrettyEnv        = "LOG_PRETTY"
+	EnvPretty        = "LOG_PRETTY"
+	EnvLevel         = "LOG_LEVEL"
 	TimeFormat       = time.RFC3339Nano
 	TimePrettyFormat = "2006-01-02 15:04:05 MST"
 )
@@ -65,7 +66,14 @@ func Logger(opts ...Option) zerolog.Logger {
 		logX = fn(logX)
 	}
 
-	return logX.Logger()
+	logger := logX.Logger()
+
+	// set log level global
+	if err := SetLogLevel(checkLevel(options.level, Default.Level)); err != nil {
+		logger.Warn().Err(err).Msg("failed to set log level in initialize")
+	}
+
+	return logger
 }
 
 // SetLogLevel globally changes zerolog's level.

@@ -19,10 +19,12 @@ var Default = struct {
 	TimeStamp bool
 	Caller    bool
 	Pretty    Selection
+	Level     string
 }{
 	TimeStamp: true,
 	Caller:    true,
 	Pretty:    SelectAuto,
+	Level:     "info",
 }
 
 func checkDefault(p *bool, v bool) bool {
@@ -37,7 +39,7 @@ func checkPretty(p *bool, v Selection) bool {
 	if p == nil {
 		switch v {
 		case SelectAuto:
-			v, ok := os.LookupEnv(PrettyEnv)
+			v, ok := os.LookupEnv(EnvPretty)
 			if ok {
 				result, _ := strconv.ParseBool(v)
 
@@ -53,4 +55,16 @@ func checkPretty(p *bool, v Selection) bool {
 	}
 
 	return *p
+}
+
+func checkLevel(p *string, level string) string {
+	if p != nil {
+		return *p
+	}
+
+	if v, ok := os.LookupEnv(EnvLevel); ok {
+		return v
+	}
+
+	return level
 }

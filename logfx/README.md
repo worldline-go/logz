@@ -3,7 +3,7 @@
 zerolog for fx dependency injection library.
 
 ```sh
-go get github.com/worldline-go/logz/logfx
+import "github.com/worldline-go/logz/logfx"
 ```
 
 ## Usage

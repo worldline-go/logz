@@ -41,35 +41,35 @@ func InitializeLog(opts ...Option) {
 }
 
 func Logger(opts ...Option) zerolog.Logger {
-	var options options
+	var o option
 	for _, opt := range opts {
-		opt(&options)
+		opt(&o)
 	}
 
 	var logX zerolog.Context
 
-	if checkPretty(options.pretty, Default.Pretty) {
+	if checkPretty(o.Pretty, Default.Pretty) {
 		logX = zerolog.New(LogWriter).With()
 	} else {
 		logX = zerolog.New(os.Stderr).With()
 	}
 
-	if checkDefault(options.timeStamp, Default.TimeStamp) {
+	if checkDefault(o.TimeStamp, Default.TimeStamp) {
 		logX = logX.Timestamp()
 	}
 
-	if checkDefault(options.caller, Default.Caller) {
+	if checkDefault(o.Caller, Default.Caller) {
 		logX = logX.Caller()
 	}
 
-	for _, fn := range options.logContextFuncs {
+	for _, fn := range o.LogContextFuncs {
 		logX = fn(logX)
 	}
 
 	logger := logX.Logger()
 
 	// set log level global
-	if err := SetLogLevel(checkLevel(options.level, Default.Level)); err != nil {
+	if err := SetLogLevel(checkLevel(o.Level, Default.Level)); err != nil {
 		logger.Warn().Err(err).Msg("failed to set log level in initialize")
 	}
 

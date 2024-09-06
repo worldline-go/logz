@@ -2,49 +2,64 @@ package logz
 
 import "github.com/rs/zerolog"
 
-type options struct {
-	pretty          *bool
-	timeStamp       *bool
-	caller          *bool
-	level           *string
-	logContextFuncs []func(zerolog.Context) zerolog.Context
+type option struct {
+	Pretty          *bool
+	TimeStamp       *bool
+	Caller          *bool
+	Level           *string
+	LogContextFuncs []func(zerolog.Context) zerolog.Context
 }
 
-type Option func(options *options)
+type Option func(options *option)
+
+func ReadOptions(opts ...Option) option {
+	var option option
+	for _, opt := range opts {
+		opt(&option)
+	}
+
+	return option
+}
+
+func WithOption(opt option) Option {
+	return func(option *option) {
+		*option = opt
+	}
+}
 
 func WithTimeStamp(timeStamp bool) Option {
-	return func(options *options) {
-		options.timeStamp = &timeStamp
+	return func(option *option) {
+		option.TimeStamp = &timeStamp
 	}
 }
 
 func WithCaller(caller bool) Option {
-	return func(options *options) {
-		options.caller = &caller
+	return func(option *option) {
+		option.Caller = &caller
 	}
 }
 
 func WithPretty(pretty bool) Option {
-	return func(options *options) {
-		options.pretty = &pretty
+	return func(option *option) {
+		option.Pretty = &pretty
 	}
 }
 
 func WithLevel(level string) Option {
-	return func(options *options) {
-		options.level = &level
+	return func(option *option) {
+		option.Level = &level
 	}
 }
 
 func WithLogContextFunc(fn func(zerolog.Context) zerolog.Context) Option {
-	return func(options *options) {
-		options.logContextFuncs = append(options.logContextFuncs, fn)
+	return func(option *option) {
+		option.LogContextFuncs = append(option.LogContextFuncs, fn)
 	}
 }
 
 func WithServiceInfo(serviceName, serviceVersion string) Option {
-	return func(options *options) {
-		options.logContextFuncs = append(options.logContextFuncs, func(ctx zerolog.Context) zerolog.Context {
+	return func(option *option) {
+		option.LogContextFuncs = append(option.LogContextFuncs, func(ctx zerolog.Context) zerolog.Context {
 			return ctx.Str("service_name", serviceName).Str("service_version", serviceVersion)
 		})
 	}

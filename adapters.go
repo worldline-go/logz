@@ -1,6 +1,13 @@
 package logz
 
-import "github.com/rs/zerolog"
+import (
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+)
+
+func Log() AdapterKV {
+	return AdapterKV{Log: log.Logger, Caller: true}
+}
 
 type Adapter interface {
 	Error(msg string, keysAndValues ...interface{})

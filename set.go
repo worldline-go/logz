@@ -40,6 +40,11 @@ func InitializeLog(opts ...Option) {
 	zerolog.TimeFieldFormat = TimeFormat
 }
 
+func SetGlobalLogger(logger zerolog.Logger) {
+	log.Logger = logger
+	zerolog.DefaultContextLogger = &log.Logger
+}
+
 func Logger(opts ...Option) zerolog.Logger {
 	var o option
 	for _, opt := range opts {

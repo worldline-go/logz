@@ -46,6 +46,7 @@ func RequestLoggerConfig(opts ...Option) middleware.RequestLoggerConfig {
 		LogResponseSize:  true,
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
 			logger.WithLevel(options.level).
+				Str("user", c.Request().Header.Get("X-User")).
 				Str("request_id", v.RequestID).
 				Str("remote_ip", v.RemoteIP).
 				Str("host", v.Host).

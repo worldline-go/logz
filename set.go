@@ -54,7 +54,13 @@ func Logger(opts ...Option) zerolog.Logger {
 	var logX zerolog.Context
 
 	if checkPretty(o.Pretty, Default.Pretty) {
-		logX = zerolog.New(LogWriter).With()
+		if o.NoColor != nil && *o.NoColor {
+			logWriter := LogWriter
+			logWriter.NoColor = true
+			logX = zerolog.New(logWriter).With()
+		} else {
+			logX = zerolog.New(LogWriter).With()
+		}
 	} else {
 		logX = zerolog.New(os.Stderr).With()
 	}

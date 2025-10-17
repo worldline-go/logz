@@ -7,6 +7,7 @@ type option struct {
 	TimeStamp       *bool
 	Caller          *bool
 	Level           *string
+	NoColor         *bool
 	LogContextFuncs []func(zerolog.Context) zerolog.Context
 }
 
@@ -62,5 +63,11 @@ func WithServiceInfo(serviceName, serviceVersion string) Option {
 		option.LogContextFuncs = append(option.LogContextFuncs, func(ctx zerolog.Context) zerolog.Context {
 			return ctx.Str("service_name", serviceName).Str("service_version", serviceVersion)
 		})
+	}
+}
+
+func WithNoColor(noColor bool) Option {
+	return func(option *option) {
+		option.NoColor = &noColor
 	}
 }

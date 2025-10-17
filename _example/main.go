@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"strings"
 
@@ -16,6 +17,7 @@ func main() {
 			return ctx.Str("log_source", "main")
 		}),
 		logz.WithServiceInfo("awesome-service", "v0.2.4"),
+		logz.WithNoColor(true),
 	)
 
 	logz.SetLogLevel("info")
@@ -23,6 +25,7 @@ func main() {
 	ctx := context.Background()
 
 	log.Ctx(context.Background()).Info().Msg("default ctx log")
+	log.Ctx(context.Background()).Error().Err(fmt.Errorf("test error")).Msg("error log example")
 
 	log.Info().Msg("Log test 1 2 1 2")
 
